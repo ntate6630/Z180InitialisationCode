@@ -1,0 +1,28 @@
+
+
+
+
+
+The init code for the Z180 
+
+C3	F0	06			JP	"INIT"
+CONTINUE_ON:
+								; Continue with firmware from here...	
+
+INIT:
+3E	40				LD    	A,01000000b     ; Reloc Z180 internal regs
+ED	39	3F			OUT0 	(3FH),A        	;    to 40H-7FH I/O addresses
+
+3E 	81				LD	 A,81H
+ED	39	7A			OUT0 	(7AH),A		; Set CBAR
+3E	7F				LD 	A,7FH
+ED	39	78			OUT0  	(78H),A		; Set CBR
+3E	7F				LD    	A,7FH
+ED	39	79			OUT0  	(79H),A		; Set BBR
+
+3E	00				LD     	A,00000000b     ; Turn off Z180 Refresh cycles
+ED	39	76			OUT0 	(76H),A
+3E	F0				LD     	A,11110000b     ; Maximum wait states for Memory and IO
+ED	39	72			OUT0 	(72H),A
+
+C3	03	00			JP 	"CONTINUE_ON"
